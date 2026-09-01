@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全国・動物園図鑑｜公営動物園・水族館の飼育個体アーカイブ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1F4EE;
+    --paper-raise:#FFFFFF;
+    --ink:#20291F;
+    --ink-soft:#5B6358;
+    --plate:#25402C;     /* ネームプレートの濃い緑 */
+    --plate-text:#F3EFDD; /* プレート上のクリーム文字 */
+    --zoo:#B9812F;        /* 動物園アクセント（土・サバンナ） */
+    --zoo-soft:#F3E7D2;
+    --aqua:#2C7A8C;       /* 水族館アクセント（海） */
+    --aqua-soft:#DCEEF1;
+    --rule:#CBD2C4;
+    --font-display:'Shippori Mincho', serif;
+    --font-body:'Zen Maru Gothic', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--font-body); line-height:1.75;
+  }
+  h1,h2,h3{font-family:var(--font-display); margin:0;}
+  a{color:inherit;}
+
+  .skip-link{position:absolute; left:-999px; top:0; background:var(--ink); color:#fff; padding:10px 16px; z-index:100;}
+  .skip-link:focus{left:0;}
+  a:focus-visible, button:focus-visible, select:focus-visible{outline:3px solid var(--zoo); outline-offset:2px;}
+
+  header{position:sticky; top:0; z-index:50; background:var(--paper-raise); border-bottom:1px solid var(--rule);}
+  .header-inner{max-width:1180px; margin:0 auto; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;}
+  .brand-jp{font-size:21px; font-weight:700;}
+  .brand-en{font-family:var(--font-mono); font-size:10.5px; color:var(--ink-soft); letter-spacing:.1em;}
+  .stat-strip{display:flex; gap:18px; font-family:var(--font-mono); font-size:12px; color:var(--ink-soft);}
+  .stat-strip b{color:var(--ink); font-size:15px; margin-right:4px;}
+
+  .hero{max-width:1180px; margin:0 auto; padding:48px 24px 8px;}
+  .hero-eyebrow{font-family:var(--font-mono); font-size:11.5px; letter-spacing:.14em; color:var(--ink-soft); text-transform:uppercase; margin-bottom:10px;}
+  .hero h1{font-size:clamp(26px,4vw,38px); line-height:1.5;}
+  .hero p{margin-top:12px; color:var(--ink-soft); max-width:62ch; font-size:15px;}
+
+  .memorial-link{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:9px 16px; border:1.5px solid var(--ink); background:var(--ink); color:#fff;
+    text-decoration:none; font-weight:700; font-size:13.5px; font-family:var(--font-body);
+  }
+  .memorial-link:hover{background:#3A4A38;}
+
+  .ad-slot{max-width:1180px; margin:0 auto; padding:0 24px;}
+  .ad-slot .box{
+    border:1.5px dashed var(--rule); background:#EAEDE4;
+    color:var(--ink-soft); font-family:var(--font-mono); font-size:11.5px;
+    text-align:center; padding:18px; letter-spacing:.05em;
+  }
+
+  /* -------- filter bar -------- */
+  .filters{
+    max-width:1180px; margin:28px auto 0; padding:0 24px;
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+  }
+  .filters select, .filters input[type=search]{
+    font-family:var(--font-body); font-size:13.5px; color:var(--ink);
+    border:1.5px solid var(--ink); background:var(--paper-raise);
+    padding:8px 12px; min-width:150px;
+  }
+  .filters input[type=search]{min-width:220px;}
+  .type-toggle{display:flex; border:1.5px solid var(--ink);}
+  .type-toggle button{
+    font-family:var(--font-body); font-weight:700; font-size:13.5px;
+    padding:8px 16px; border:none; background:var(--paper-raise); color:var(--ink); cursor:pointer;
+    border-right:1.5px solid var(--ink);
+  }
+  .type-toggle button:last-child{border-right:none;}
+  .type-toggle button.active[data-type="動物園"]{background:var(--zoo); color:#fff;}
+  .type-toggle button.active[data-type="水族館"]{background:var(--aqua); color:#fff;}
+  .type-toggle button.active[data-type=""]{background:var(--ink); color:#fff;}
+  .result-count{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); margin-left:auto;}
+
+  /* -------- grid -------- */
+  .grid-wrap{max-width:1180px; margin:0 auto; padding:24px 24px 64px;}
+  .card-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:22px;}
+  .load-note{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); grid-column:1/-1; padding:24px 0;}
+
+  /* -------- animal card (enclosure nameplate motif) -------- */
+  .acard{background:var(--paper-raise); border:1.5px solid var(--ink); display:flex; flex-direction:column;}
+  .acard-plate{background:var(--plate); color:var(--plate-text); padding:10px 14px; display:flex; justify-content:space-between; align-items:baseline; gap:8px;}
+  .acard-plate .name{font-family:var(--font-display); font-size:18px; font-weight:700;}
+  .acard-plate .species{font-family:var(--font-mono); font-size:11px; opacity:.85;}
+  .acard-photos{display:flex; gap:1px; background:var(--rule);}
+  .photo-slot{
+    flex:1; aspect-ratio:1/1; background:repeating-linear-gradient(45deg,#E7E9E2,#E7E9E2 8px,#DEE1D8 8px,#DEE1D8 16px);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-size:10.5px; color:var(--ink-soft); text-align:center; padding:6px;
+  }
+  .acard-data{
+    display:grid; grid-template-columns:auto 1fr; gap:4px 10px;
+    font-family:var(--font-mono); font-size:12px; padding:12px 14px 4px; color:var(--ink-soft);
+  }
+  .acard-data dt{font-weight:600; color:var(--ink);}
+  .acard-data dd{margin:0;}
+  .acard-feature{padding:10px 14px 14px; font-size:13.5px; color:var(--ink);}
+  .acard-feature .label{font-family:var(--font-mono); font-size:10.5px; color:var(--ink-soft); display:block; margin-bottom:2px;}
+  .acard-foot{
+    margin-top:auto; display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--font-mono); font-size:11px; color:var(--ink-soft);
+    padding:8px 14px; border-top:1px solid var(--rule);
+  }
+  .acard-foot a{text-decoration:underline; text-underline-offset:3px; font-weight:600;}
+  .type-badge{font-size:10px; padding:2px 8px; font-family:var(--font-mono); color:#fff;}
+  .type-badge.動物園{background:var(--zoo);}
+  .type-badge.水族館{background:var(--aqua);}
+
+  footer{background:var(--ink); color:#E7E9E2; margin-top:20px;}
+  .footer-inner{max-width:1180px; margin:0 auto; padding:36px 24px 24px; font-size:13px; color:#B7BDAF;}
+  .footer-inner a{color:#E7E9E2; text-decoration:underline;}
+
+  @media (max-width:720px){
+    .filters{flex-direction:column; align-items:stretch;}
+    .result-count{margin-left:0;}
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">本文へスキップ</a>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="brand-jp">全国・動物園図鑑</div>
+      <div class="brand-en">NATIONAL ZOO & AQUARIUM ARCHIVE — 公営施設限定</div>
+    </div>
+    <div class="stat-strip">
+      <span><b id="stat-facilities">—</b>収録施設</span>
+      <span><b id="stat-animals">—</b>収録個体</span>
+    </div>
+    <a class="memorial-link" href="memorial.html">🕯 追悼コーナーへ</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="hero-eyebrow">Public Zoos & Aquariums Only</div>
+    <h1>全国の「公営」動物園・水族館。<br>そこで暮らす一頭一匹を、同じ形式で記録する。</h1>
+    <p>顔写真・全身写真・名前・生年月日・出生地・特徴（外面的特徴／性格／好物）——すべての施設を同じフォーマットで統一した個体図鑑です。データが整っている施設から順次登録し、随時拡張していきます。本ページは現在飼育されている個体が対象です。旅立った個体は<a href="memorial.html" style="text-decoration:underline;">追悼コーナー</a>に記録しています。</p>
+  </section>
+
+  <div class="ad-slot"><div class="box">広告枠（実装予定・728×90）</div></div>
+
+  <div class="filters">
+    <div class="type-toggle" id="type-toggle">
+      <button type="button" class="active" data-type="">すべて</button>
+      <button type="button" data-type="動物園">動物園</button>
+      <button type="button" data-type="水族館">水族館</button>
+    </div>
+    <select id="filter-pref"><option value="">都道府県：すべて</option></select>
+    <select id="filter-facility"><option value="">施設：すべて</option></select>
+    <input type="search" id="filter-text" placeholder="種名・個体名で検索">
+    <span class="result-count" id="result-count"></span>
+  </div>
+
+  <div class="grid-wrap">
+    <div class="card-grid" id="grid">
+      <p class="load-note">読み込み中…</p>
+    </div>
+  </div>
+  <div class="ad-slot"><div class="box">広告枠（実装予定・728×90）</div></div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    全国・動物園図鑑（プロトタイプ）／掲載データは <code>data/facilities.csv</code> と <code>data/animals.csv</code> により管理されています。写真は準備が整い次第、各施設の許諾を得たものに差し替えます。
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script>
+  let facilities = [];
+  let animals = [];
+  let state = { type:'', pref:'', facility:'', text:'' };
+
+  function esc(s){
+    return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function facilityById(id){ return facilities.find(f => f['施設ID'] === id); }
+
+  function photoSlot(url, label){
+    if (url) return `<div class="photo-slot" style="background:center/cover no-repeat url('${esc(url)}')"></div>`;
+    return `<div class="photo-slot">${label}<br>準備中</div>`;
+  }
+
+  function cardHtml(a){
+    const fac = facilityById(a['施設ID']) || {};
+    const type = fac['種別'] || '';
+    const hasFeature = (a['特徴_外見']||'').trim() || (a['特徴_性格']||'').trim() || (a['好物']||'').trim();
+    return `
+      <article class="acard">
+        <div class="acard-plate">
+          <span class="name">${esc(a['個体名'] || '（名前未登録）')}</span>
+          <span class="species">${esc(a['種名'] || '')}</span>
+        </div>
+        <div class="acard-photos">
+          ${photoSlot(a['顔写真URL'], '顔写真')}
+          ${photoSlot(a['全身写真URL'], '全身写真')}
+        </div>
+        <dl class="acard-data">
+          <dt>性別</dt><dd>${esc(a['性別']||'—')}</dd>
+          <dt>生年月日</dt><dd>${esc(a['生年月日']||'—')}</dd>
+          <dt>出生地</dt><dd>${esc(a['出生地']||'—')}</dd>
+        </dl>
+        ${hasFeature ? `
+        <div class="acard-feature">
+          ${a['特徴_外見'] ? `<span class="label">外面的特徴</span>${esc(a['特徴_外見'])}<br>` : ''}
+          ${a['特徴_性格'] ? `<span class="label">性格</span>${esc(a['特徴_性格'])}<br>` : ''}
+          ${a['好物'] ? `<span class="label">好物</span>${esc(a['好物'])}` : ''}
+        </div>` : ''}
+        <div class="acard-foot">
+          <span>${type ? `<span class="type-badge ${esc(type)}">${esc(type)}</span> ` : ''}${esc(fac['施設名']||'')}</span>
+          ${a['出典URL'] ? `<a href="${esc(a['出典URL'])}" target="_blank" rel="noopener">出典 →</a>` : ''}
+        </div>
+      </article>`;
+  }
+
+  function isSampleRow(a){
+    return (a['個体名']||'').includes('サンプル') || (a['種名']||'').includes('サンプル');
+  }
+  function isLiving(a){
+    return (a['状態']||'生存').trim() !== '逝去';
+  }
+
+  function applyFilters(){
+    const q = state.text.trim().toLowerCase();
+    const filtered = animals.filter(a => {
+      if (isSampleRow(a)) return false;
+      if (!isLiving(a)) return false;
+      const fac = facilityById(a['施設ID']) || {};
+      if (state.type && fac['種別'] !== state.type) return false;
+      if (state.pref && fac['都道府県'] !== state.pref) return false;
+      if (state.facility && a['施設ID'] !== state.facility) return false;
+      if (q && !(`${a['種名']} ${a['個体名']}`.toLowerCase().includes(q))) return false;
+      return true;
+    });
+
+    const grid = document.getElementById('grid');
+    grid.innerHTML = filtered.length
+      ? filtered.map(cardHtml).join('')
+      : '<p class="load-note">該当する個体がまだ登録されていません。animals.csv に行を追加してください。</p>';
+
+    document.getElementById('result-count').textContent = `${filtered.length}頭・匹を表示中`;
+  }
+
+  function populateFilterOptions(){
+    const prefs = [...new Set(facilities.map(f => f['都道府県']).filter(Boolean))].sort();
+    const prefSel = document.getElementById('filter-pref');
+    prefs.forEach(p => prefSel.insertAdjacentHTML('beforeend', `<option value="${esc(p)}">${esc(p)}</option>`));
+
+    function refreshFacilityOptions(){
+      const facSel = document.getElementById('filter-facility');
+      facSel.innerHTML = '<option value="">施設：すべて</option>';
+      facilities
+        .filter(f => !state.pref || f['都道府県'] === state.pref)
+        .filter(f => !state.type || f['種別'] === state.type)
+        .forEach(f => facSel.insertAdjacentHTML('beforeend', `<option value="${esc(f['施設ID'])}">${esc(f['施設名'])}</option>`));
+    }
+    refreshFacilityOptions();
+
+    prefSel.addEventListener('change', e => { state.pref = e.target.value; state.facility=''; refreshFacilityOptions(); applyFilters(); });
+    document.getElementById('filter-facility').addEventListener('change', e => { state.facility = e.target.value; applyFilters(); });
+    document.getElementById('filter-text').addEventListener('input', e => { state.text = e.target.value; applyFilters(); });
+
+    document.querySelectorAll('#type-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#type-toggle button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.type = btn.dataset.type;
+        state.facility = '';
+        refreshFacilityOptions();
+        applyFilters();
+      });
+    });
+  }
+
+  function updateStats(){
+    document.getElementById('stat-facilities').textContent = facilities.length;
+    document.getElementById('stat-animals').textContent = animals.filter(a => !isSampleRow(a) && isLiving(a)).length;
+  }
+
+  async function loadCsv(path){
+    const res = await fetch(path);
+    if (!res.ok) throw new Error(path + ' -> HTTP ' + res.status);
+    const text = await res.text();
+    return Papa.parse(text, { header:true, skipEmptyLines:true }).data;
+  }
+
+  async function init(){
+    try {
+      [facilities, animals] = await Promise.all([
+        loadCsv('data/facilities.csv'),
+        loadCsv('data/animals.csv'),
+      ]);
+      updateStats();
+      populateFilterOptions();
+      applyFilters();
+    } catch (e) {
+      console.warn(e);
+      document.getElementById('grid').innerHTML =
+        '<p class="load-note">データ（facilities.csv / animals.csv）を読み込めませんでした。'
+        + 'ファイルを直接開いている場合は表示されません。サーバー経由（GitHub Pages等）で開いてください。</p>';
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>
