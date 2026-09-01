@@ -407,8 +407,8 @@
   async function init(){
     try {
       [facilities, animals] = await Promise.all([
-        loadCsv('data/facilities.csv'),
-        loadCsv('data/animals.csv'),
+        loadCsv('facilities.csv'),
+        loadCsv('animals.csv'),
       ]);
       await loadMap();
       renderCrumb();

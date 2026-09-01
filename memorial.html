@@ -166,8 +166,8 @@
   async function init(){
     try {
       const [facilities, animals] = await Promise.all([
-        loadCsv('data/facilities.csv'),
-        loadCsv('data/animals.csv'),
+        loadCsv('facilities.csv'),
+        loadCsv('animals.csv'),
       ]);
       const byId = Object.fromEntries(facilities.map(f => [f['施設ID'], f]));
 
