@@ -1,1 +1,425 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全国・動物園図鑑｜公営動物園・水族館の飼育個体アーカイブ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1F4EE;
+    --paper-raise:#FFFFFF;
+    --ink:#20291F;
+    --ink-soft:#5B6358;
+    --plate:#25402C;
+    --plate-text:#F3EFDD;
+    --zoo:#B9812F;
+    --zoo-soft:#F3E7D2;
+    --aqua:#2C7A8C;
+    --aqua-soft:#DCEEF1;
+    --rule:#CBD2C4;
+    --map-empty:#E4E7DE;
+    --map-some:#CFE0D6;
+    --map-full:#8FBFA0;
+    --font-display:'Shippori Mincho', serif;
+    --font-body:'Zen Maru Gothic', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); line-height:1.75;}
+  h1,h2,h3{font-family:var(--font-display); margin:0;}
+  a{color:inherit;}
+  button{font-family:inherit;}
 
+  .skip-link{position:absolute; left:-999px; top:0; background:var(--ink); color:#fff; padding:10px 16px; z-index:100;}
+  .skip-link:focus{left:0;}
+  a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible{outline:3px solid var(--zoo); outline-offset:2px;}
+
+  header{position:sticky; top:0; z-index:50; background:var(--paper-raise); border-bottom:1px solid var(--rule);}
+  .header-inner{max-width:1180px; margin:0 auto; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap;}
+  .brand-jp{font-size:21px; font-weight:700;}
+  .brand-en{font-family:var(--font-mono); font-size:10.5px; color:var(--ink-soft); letter-spacing:.1em;}
+  .memorial-link{
+    display:inline-flex; align-items:center; gap:8px; padding:9px 16px;
+    border:1.5px solid var(--ink); background:var(--ink); color:#fff;
+    text-decoration:none; font-weight:700; font-size:13.5px;
+  }
+  .memorial-link:hover{background:#3A4A38;}
+
+  .hero{max-width:1180px; margin:0 auto; padding:40px 24px 4px;}
+  .hero-eyebrow{font-family:var(--font-mono); font-size:11.5px; letter-spacing:.14em; color:var(--ink-soft); text-transform:uppercase; margin-bottom:10px;}
+  .hero h1{font-size:clamp(24px,4vw,34px); line-height:1.5;}
+  .hero p{margin-top:10px; color:var(--ink-soft); max-width:66ch; font-size:14.5px;}
+
+  .ad-slot{max-width:1180px; margin:20px auto 0; padding:0 24px;}
+  .ad-slot .box{
+    border:1.5px dashed var(--rule); background:#EAEDE4; color:var(--ink-soft);
+    font-family:var(--font-mono); font-size:11.5px; text-align:center; padding:16px; letter-spacing:.05em;
+  }
+
+  /* ---------- breadcrumb ---------- */
+  .crumb{
+    max-width:1180px; margin:24px auto 0; padding:0 24px;
+    display:flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:12.5px; color:var(--ink-soft);
+  }
+  .crumb button{background:none; border:none; color:var(--ink-soft); text-decoration:underline; cursor:pointer; padding:0; font-size:12.5px;}
+  .crumb button:disabled{color:var(--ink); text-decoration:none; cursor:default; font-weight:700;}
+  .crumb .sep{opacity:.5;}
+
+  /* ---------- view container ---------- */
+  .view-wrap{max-width:1180px; margin:0 auto; padding:20px 24px 72px;}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* ---------- map view ---------- */
+  .map-legend{display:flex; gap:18px; flex-wrap:wrap; margin-bottom:16px; font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft);}
+  .map-legend .sw{display:inline-block; width:12px; height:12px; margin-right:6px; vertical-align:-1px; border:1px solid var(--rule);}
+  #map-mount{width:100%; max-width:720px; margin:0 auto;}
+  #map-mount svg{width:100%; height:auto; display:block;}
+  #map-mount .prefecture{cursor:pointer; transition:filter .1s ease;}
+  #map-mount .prefecture:hover{filter:brightness(0.92);}
+  #map-mount .prefecture polygon, #map-mount .prefecture path{pointer-events:all;}
+
+  .map-tooltip{
+    position:fixed; pointer-events:none; z-index:80;
+    background:var(--ink); color:#fff; padding:6px 12px; font-size:12.5px;
+    font-family:var(--font-body); white-space:nowrap; transform:translate(-50%,-130%);
+    display:none;
+  }
+  .map-tooltip b{font-family:var(--font-mono); font-weight:600;}
+
+  /* ---------- facility list (per prefecture) ---------- */
+  .facility-row{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    background:var(--paper-raise); border:1.5px solid var(--ink); padding:16px 20px; margin-bottom:12px; cursor:pointer;
+  }
+  .facility-row:hover{background:#EFEEE8;}
+  .facility-main{display:flex; align-items:center; gap:14px;}
+  .type-badge{font-size:10px; padding:3px 9px; font-family:var(--font-mono); color:#fff; flex-shrink:0;}
+  .type-badge.動物園{background:var(--zoo);}
+  .type-badge.水族館{background:var(--aqua);}
+  .facility-name{font-size:16px; font-weight:700;}
+  .facility-sub{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); margin-top:2px;}
+  .facility-arrow{font-family:var(--font-mono); font-size:18px; color:var(--ink-soft);}
+  .empty-note{font-family:var(--font-mono); font-size:12.5px; color:var(--ink-soft); padding:24px 0;}
+
+  /* ---------- animal grid (per facility) ---------- */
+  .animal-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:18px;}
+  .animal-card{background:var(--paper-raise); border:1.5px solid var(--ink); display:flex; flex-direction:column;}
+  .animal-illust{
+    aspect-ratio:4/3; display:flex; align-items:center; justify-content:center;
+    background:var(--illust-bg, var(--zoo-soft)); border-bottom:1.5px solid var(--ink);
+  }
+  .animal-illust svg{width:56%; height:56%;}
+  .animal-body{padding:12px 14px; display:flex; flex-direction:column; gap:6px;}
+  .animal-name{font-family:var(--font-display); font-size:16px; font-weight:700;}
+  .animal-species{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft);}
+  .animal-meta{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); display:flex; gap:10px; flex-wrap:wrap;}
+  .animal-feature{font-size:12.5px; color:var(--ink); margin-top:2px;}
+
+  footer{background:var(--ink); color:#E7E9E2; margin-top:20px;}
+  .footer-inner{max-width:1180px; margin:0 auto; padding:32px 24px 24px; font-size:12.5px; color:#B7BDAF;}
+  .footer-inner a{color:#E7E9E2; text-decoration:underline;}
+
+  @media (max-width:720px){
+    .facility-row{flex-direction:column; align-items:flex-start; gap:8px;}
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">本文へスキップ</a>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <div class="brand-jp">全国・動物園図鑑</div>
+      <div class="brand-en">NATIONAL ZOO & AQUARIUM ARCHIVE — 公営施設限定</div>
+    </div>
+    <a class="memorial-link" href="memorial.html">🕯 追悼コーナーへ</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="hero-eyebrow">Tap a prefecture to begin</div>
+    <h1>地図から、その土地の動物園・水族館へ。</h1>
+    <p>都道府県をクリックすると、その地域の公営動物園・水族館が表示されます。さらに施設をクリックすると、そこで暮らす動物たちをイラストで紹介します（写真は個体ごとには扱わず、種類ごとの共通イラストで表示しています）。</p>
+  </section>
+
+  <div class="ad-slot"><div class="box">広告枠（実装予定・728×90）</div></div>
+
+  <div class="crumb" id="crumb"></div>
+
+  <div class="view-wrap">
+
+    <!-- ============ VIEW 1: MAP ============ -->
+    <div class="view active" id="view-map">
+      <div class="map-legend">
+        <span><span class="sw" style="background:var(--map-empty)"></span>施設データなし</span>
+        <span><span class="sw" style="background:var(--map-some)"></span>収録あり</span>
+        <span><span class="sw" style="background:var(--map-full)"></span>複数施設を収録</span>
+      </div>
+      <div id="map-mount">
+        <p class="empty-note">地図を読み込み中…</p>
+      </div>
+    </div>
+
+    <!-- ============ VIEW 2: FACILITY LIST (per prefecture) ============ -->
+    <div class="view" id="view-pref">
+      <h2 id="pref-title" style="font-size:22px; margin-bottom:18px;"></h2>
+      <div id="pref-list"></div>
+    </div>
+
+    <!-- ============ VIEW 3: ANIMAL LIST (per facility) ============ -->
+    <div class="view" id="view-facility">
+      <h2 id="facility-title" style="font-size:22px; margin-bottom:4px;"></h2>
+      <p id="facility-sub" style="font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); margin:0 0 20px;"></p>
+      <div class="animal-grid" id="animal-grid"></div>
+    </div>
+
+  </div>
+</main>
+
+<div class="map-tooltip" id="tooltip"></div>
+
+<footer>
+  <div class="footer-inner">
+    全国・動物園図鑑（プロトタイプ）／掲載データは <code>data/facilities.csv</code> と <code>data/animals.csv</code> により管理されています。
+    地図データ：<a href="https://github.com/geolonia/japanese-prefectures" target="_blank" rel="noopener">geolonia/japanese-prefectures</a>（Wikipedia「日本地図.svg」を改変・GFDL）。
+    動物のイラストは種類ごとの共通イラストであり、個体固有の写真ではありません。
+  </div>
+</footer>
+
+<!-- ---------- 汎用イラスト（分類・代表種ごとのシンボル定義） ---------- -->
+<svg width="0" height="0" style="position:absolute">
+<defs>
+  <symbol id="icon-哺乳類" viewBox="0 0 100 100"><circle cx="50" cy="55" r="28" fill="currentColor"/><circle cx="30" cy="30" r="12" fill="currentColor"/><circle cx="70" cy="30" r="12" fill="currentColor"/><circle cx="50" cy="60" r="6" fill="#fff"/></symbol>
+  <symbol id="icon-鳥類" viewBox="0 0 100 100"><path d="M50 20 C70 20 82 38 82 55 C82 72 68 82 50 82 C32 82 18 72 18 55 C18 38 30 20 50 20 Z" fill="currentColor"/><path d="M82 50 L98 45 L86 60 Z" fill="currentColor"/><circle cx="38" cy="42" r="4" fill="#fff"/></symbol>
+  <symbol id="icon-魚類" viewBox="0 0 100 100"><path d="M15 50 C30 25 70 25 85 50 C70 75 30 75 15 50 Z" fill="currentColor"/><path d="M15 50 L2 35 L2 65 Z" fill="currentColor"/><circle cx="65" cy="44" r="4" fill="#fff"/></symbol>
+  <symbol id="icon-爬虫類" viewBox="0 0 100 100"><ellipse cx="55" cy="55" rx="32" ry="24" fill="currentColor"/><circle cx="25" cy="45" r="14" fill="currentColor"/><circle cx="19" cy="40" r="3" fill="#fff"/><path d="M20 78 L10 92 M40 82 L34 95 M70 80 L72 94" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></symbol>
+  <symbol id="icon-両生類" viewBox="0 0 100 100"><ellipse cx="50" cy="58" rx="30" ry="22" fill="currentColor"/><circle cx="32" cy="34" r="10" fill="currentColor"/><circle cx="68" cy="34" r="10" fill="currentColor"/><circle cx="32" cy="32" r="3" fill="#fff"/><circle cx="68" cy="32" r="3" fill="#fff"/></symbol>
+  <symbol id="icon-その他" viewBox="0 0 100 100"><circle cx="50" cy="50" r="34" fill="currentColor"/><text x="50" y="58" font-size="28" fill="#fff" text-anchor="middle" font-family="monospace">?</text></symbol>
+
+  <symbol id="icon-ライオン" viewBox="0 0 100 100">
+    <circle cx="50" cy="52" r="30" fill="currentColor" opacity="0.35"/>
+    <circle cx="50" cy="52" r="20" fill="currentColor"/>
+    <circle cx="43" cy="47" r="2.6" fill="#fff"/><circle cx="57" cy="47" r="2.6" fill="#fff"/>
+    <path d="M50 55 l-4 5 h8 z" fill="#fff"/>
+  </symbol>
+  <symbol id="icon-ペンギン" viewBox="0 0 100 100">
+    <ellipse cx="50" cy="58" rx="22" ry="30" fill="currentColor"/>
+    <ellipse cx="50" cy="62" rx="12" ry="20" fill="#fff"/>
+    <circle cx="44" cy="38" r="2.4" fill="#fff"/><circle cx="56" cy="38" r="2.4" fill="#fff"/>
+    <path d="M50 42 l-4 4 h8 z" fill="#E07B39"/>
+  </symbol>
+  <symbol id="icon-ジンベエザメ" viewBox="0 0 100 100">
+    <path d="M10 55 C25 25 75 25 92 52 C75 79 25 79 10 55 Z" fill="currentColor"/>
+    <path d="M10 55 L-2 40 L-2 70 Z" fill="currentColor"/>
+    <circle cx="30" cy="48" r="8" fill="#fff" opacity=".5"/><circle cx="46" cy="52" r="8" fill="#fff" opacity=".5"/><circle cx="62" cy="48" r="8" fill="#fff" opacity=".5"/>
+  </symbol>
+  <symbol id="icon-マレーバク" viewBox="0 0 100 100">
+    <ellipse cx="52" cy="55" rx="28" ry="20" fill="currentColor"/>
+    <rect x="46" y="50" width="26" height="18" fill="#fff"/>
+    <path d="M22 50 q-14 2 -14 -8 q10 -4 18 4 z" fill="currentColor"/>
+  </symbol>
+</defs>
+</svg>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script>
+  // 都道府県コード(JIS) -> 正式名称
+  const PREF_NAMES = {1:"北海道",2:"青森県",3:"岩手県",4:"宮城県",5:"秋田県",6:"山形県",7:"福島県",
+    8:"茨城県",9:"栃木県",10:"群馬県",11:"埼玉県",12:"千葉県",13:"東京都",14:"神奈川県",
+    15:"新潟県",16:"富山県",17:"石川県",18:"福井県",19:"山梨県",20:"長野県",21:"岐阜県",
+    22:"静岡県",23:"愛知県",24:"三重県",25:"滋賀県",26:"京都府",27:"大阪府",28:"兵庫県",
+    29:"奈良県",30:"和歌山県",31:"鳥取県",32:"島根県",33:"岡山県",34:"広島県",35:"山口県",
+    36:"徳島県",37:"香川県",38:"愛媛県",39:"高知県",40:"福岡県",41:"佐賀県",42:"長崎県",
+    43:"熊本県",44:"大分県",45:"宮崎県",46:"鹿児島県",47:"沖縄県"};
+
+  let facilities = [], animals = [];
+  const state = { view:'map', pref:null, facility:null };
+
+  function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function isSampleRow(a){ return (a['個体名']||'').includes('サンプル') || (a['種名']||'').includes('サンプル'); }
+  function isLiving(a){ return (a['状態']||'生存').trim() !== '逝去'; }
+
+  function facilitiesByPref(prefName){
+    return facilities.filter(f => f['都道府県'] === prefName);
+  }
+
+  const SPECIFIC_ICONS = ['ライオン','ペンギン','ジンベエザメ','マレーバク'];
+
+  function iconIdFor(a){
+    const species = (a['種名']||'').trim();
+    const specific = SPECIFIC_ICONS.find(key => species.includes(key));
+    if (specific) return 'icon-' + specific;
+    const cat = (a['分類']||'').trim();
+    if (document.getElementById('icon-' + cat)) return 'icon-' + cat;
+    return 'icon-その他';
+  }
+
+  function iconColorFor(fac){
+    return (fac && fac['種別'] === '水族館') ? 'var(--aqua)' : 'var(--zoo)';
+  }
+  function iconBgFor(fac){
+    return (fac && fac['種別'] === '水族館') ? 'var(--aqua-soft)' : 'var(--zoo-soft)';
+  }
+
+  // ---------------- view switching ----------------
+  function showView(name){
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    state.view = name;
+    renderCrumb();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function renderCrumb(){
+    const crumb = document.getElementById('crumb');
+    let html = `<button ${state.view==='map'?'disabled':''} onclick="goMap()">全国地図</button>`;
+    if (state.pref){
+      html += `<span class="sep">›</span><button ${state.view==='pref'?'disabled':''} onclick="goPref('${esc(state.pref)}')">${esc(state.pref)}</button>`;
+    }
+    if (state.facility){
+      const fac = facilities.find(f => f['施設ID'] === state.facility);
+      html += `<span class="sep">›</span><button disabled>${esc(fac ? fac['施設名'] : '')}</button>`;
+    }
+    crumb.innerHTML = html;
+  }
+
+  window.goMap = function(){ state.pref=null; state.facility=null; showView('map'); };
+  window.goPref = function(prefName){
+    state.pref = prefName; state.facility = null;
+    renderPrefView(prefName);
+    showView('pref');
+  };
+  window.goFacility = function(facilityId){
+    state.facility = facilityId;
+    const fac = facilities.find(f => f['施設ID'] === facilityId);
+    if (fac) state.pref = fac['都道府県'];
+    renderFacilityView(facilityId);
+    showView('facility');
+  };
+
+  // ---------------- render: prefecture facility list ----------------
+  function renderPrefView(prefName){
+    document.getElementById('pref-title').textContent = `${prefName}の公営動物園・水族館`;
+    const list = facilitiesByPref(prefName);
+    const wrap = document.getElementById('pref-list');
+    if (!list.length){
+      wrap.innerHTML = '<p class="empty-note">この都道府県はまだ登録されていません。facilities.csv に追記してください。</p>';
+      return;
+    }
+    wrap.innerHTML = list.map(f => {
+      const count = animals.filter(a => a['施設ID']===f['施設ID'] && !isSampleRow(a) && isLiving(a)).length;
+      return `
+        <div class="facility-row" onclick="goFacility('${esc(f['施設ID'])}')">
+          <div class="facility-main">
+            <span class="type-badge ${esc(f['種別'])}">${esc(f['種別'])}</span>
+            <div>
+              <div class="facility-name">${esc(f['施設名'])}</div>
+              <div class="facility-sub">収録個体 ${count}件 ／ データ状況：${esc(f['データ状況']||'—')}</div>
+            </div>
+          </div>
+          <span class="facility-arrow">→</span>
+        </div>`;
+    }).join('');
+  }
+
+  // ---------------- render: animal grid ----------------
+  function renderFacilityView(facilityId){
+    const fac = facilities.find(f => f['施設ID'] === facilityId) || {};
+    document.getElementById('facility-title').textContent = fac['施設名'] || '';
+    document.getElementById('facility-sub').textContent = `${fac['都道府県']||''} ・ ${fac['運営主体']||''}`;
+
+    const list = animals.filter(a => a['施設ID']===facilityId && !isSampleRow(a) && isLiving(a));
+    const grid = document.getElementById('animal-grid');
+    if (!list.length){
+      grid.innerHTML = '<p class="empty-note">この施設の個体はまだ登録されていません。animals.csv に追記してください。</p>';
+      return;
+    }
+    grid.innerHTML = list.map(a => `
+      <div class="animal-card">
+        <div class="animal-illust" style="--illust-bg:${iconBgFor(fac)}">
+          <svg style="color:${iconColorFor(fac)}"><use href="#${iconIdFor(a)}"/></svg>
+        </div>
+        <div class="animal-body">
+          <div class="animal-name">${esc(a['個体名']||'（名前未登録）')}</div>
+          <div class="animal-species">${esc(a['種名']||'')}</div>
+          <div class="animal-meta">
+            ${a['性別'] ? `<span>${esc(a['性別'])}</span>` : ''}
+            ${a['生年月日'] ? `<span>${esc(a['生年月日'])}生</span>` : ''}
+          </div>
+          ${a['特徴_外見'] || a['特徴_性格'] || a['好物'] ? `<div class="animal-feature">${esc(a['特徴_外見']||a['特徴_性格']||a['好物'])}</div>` : ''}
+        </div>
+      </div>`).join('');
+  }
+
+  // ---------------- map coloring + interaction ----------------
+  function colorMap(){
+    document.querySelectorAll('#map-mount .prefecture').forEach(el => {
+      const code = parseInt(el.getAttribute('data-code'), 10);
+      const name = PREF_NAMES[code];
+      const count = facilitiesByPref(name).length;
+      const fill = count === 0 ? 'var(--map-empty)' : (count === 1 ? 'var(--map-some)' : 'var(--map-full)');
+      el.style.fill = fill;
+      el.style.stroke = '#8A9186';
+      el.style.strokeWidth = '1';
+    });
+  }
+
+  function attachMapEvents(){
+    const tooltip = document.getElementById('tooltip');
+    document.querySelectorAll('#map-mount .prefecture').forEach(el => {
+      const code = parseInt(el.getAttribute('data-code'), 10);
+      const name = PREF_NAMES[code];
+      const count = facilitiesByPref(name).length;
+
+      el.addEventListener('mousemove', (e) => {
+        tooltip.style.display = 'block';
+        tooltip.style.left = e.clientX + 'px';
+        tooltip.style.top = e.clientY + 'px';
+        tooltip.innerHTML = `${esc(name)}　<b>${count}</b>施設`;
+      });
+      el.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+      el.addEventListener('click', () => { tooltip.style.display = 'none'; goPref(name); });
+    });
+  }
+
+  async function loadMap(){
+    const res = await fetch('map-full.svg');
+    const svgText = await res.text();
+    document.getElementById('map-mount').innerHTML = svgText;
+    colorMap();
+    attachMapEvents();
+  }
+
+  async function loadCsv(path){
+    const res = await fetch(path);
+    if (!res.ok) throw new Error(path + ' -> HTTP ' + res.status);
+    const text = await res.text();
+    return Papa.parse(text, { header:true, skipEmptyLines:true }).data;
+  }
+
+  async function init(){
+    try {
+      [facilities, animals] = await Promise.all([
+        loadCsv('data/facilities.csv'),
+        loadCsv('data/animals.csv'),
+      ]);
+      await loadMap();
+      renderCrumb();
+    } catch (e) {
+      console.warn(e);
+      document.getElementById('map-mount').innerHTML =
+        '<p class="empty-note">データを読み込めませんでした。サーバー経由（GitHub Pages等）で開いてください。</p>';
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>
