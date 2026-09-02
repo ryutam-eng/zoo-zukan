@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>サンショウウオ科｜全国・動物園図鑑</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Zen+Maru+Gothic:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F5F1; --paper-raise:#FFFFFF; --ink:#2B2420; --ink-soft:#6E645C;
+    --rust:#C1622D; --rust-soft:#F3DFCF; --moss:#57654A; --moss-soft:#E4E9DC;
+    --en-badge:#8B4A3C; --rule:#DFDACF;
+    --font-display:'Zen Kaku Gothic New', sans-serif;
+    --font-body:'Zen Maru Gothic', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); line-height:1.8;}
+  h1,h2{font-family:var(--font-display); margin:0;}
+  a{color:inherit;}
+  .skip-link{position:absolute; left:-999px; top:0; background:var(--ink); color:#fff; padding:10px 16px;}
+  .skip-link:focus{left:0;}
+  a:focus-visible{outline:3px solid var(--moss); outline-offset:2px;}
+
+  header{border-bottom:1px solid var(--rule); background:var(--paper-raise);}
+  .header-inner{max-width:980px; margin:0 auto; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; gap:16px;}
+  .back-link{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); text-decoration:underline;}
+  .site-mark{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); letter-spacing:.08em;}
+
+  .page{max-width:980px; margin:0 auto; padding:28px 24px 80px;}
+
+  .id-banner{display:grid; grid-template-columns:180px 1fr; gap:26px; background:var(--paper-raise); border:1.5px solid var(--ink); padding:24px; margin-bottom:22px;}
+  .id-illust{background:var(--moss-soft); display:flex; align-items:center; justify-content:center; aspect-ratio:1/1;}
+  .id-illust svg{width:74%; height:74%;}
+  .id-num{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); letter-spacing:.1em;}
+  .id-name-jp{font-size:clamp(26px,4vw,34px); margin-top:4px;}
+  .id-name-latin{font-family:var(--font-mono); font-style:italic; color:var(--ink-soft); font-size:14px; margin-top:2px;}
+  .id-tags{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;}
+  .tag{font-family:var(--font-mono); font-size:11px; padding:4px 10px; border:1px solid var(--ink); color:var(--ink);}
+  .tag.warn{background:var(--en-badge); color:#fff; border-color:var(--en-badge); font-weight:600;}
+
+  .sec{background:var(--paper-raise); border:1.5px solid var(--ink); padding:22px 24px; margin-bottom:18px;}
+  .sec-head{display:flex; align-items:baseline; gap:10px; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--rule);}
+  .sec-no{font-family:var(--font-mono); font-size:12px; color:#fff; background:var(--moss); padding:3px 9px;}
+  .sec-title{font-size:19px;}
+  .sec p{margin:0; font-size:14px;}
+
+  .eco-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .eco-item{border:1px solid var(--rule); padding:12px 14px;}
+  .eco-label{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); display:block; margin-bottom:4px;}
+  .eco-item p{font-size:13.5px;}
+
+  table.species-table{width:100%; border-collapse:collapse; font-size:13px;}
+  table.species-table th, table.species-table td{border:1px solid var(--rule); padding:8px 10px; text-align:left;}
+  table.species-table th{background:var(--moss-soft); font-family:var(--font-mono); font-size:11px; font-weight:600;}
+  table.species-table td.status-CR{color:#fff; background:var(--en-badge); font-weight:700; text-align:center;}
+  table.species-table td.status-EN{color:var(--en-badge); font-weight:700; text-align:center;}
+  table.species-table td.status-VU, table.species-table td.status-NT{color:var(--moss); font-weight:600; text-align:center;}
+  table.species-table td.status-blank{text-align:center; color:var(--ink-soft);}
+
+  .rep-links{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:12px;}
+  .rep-card{border:1.5px solid var(--ink); padding:14px 16px; text-decoration:none; display:block;}
+  .rep-card:hover{background:var(--moss-soft);}
+  .rep-card .rep-name{font-size:15px; font-weight:700;}
+  .rep-card .rep-note{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); margin-top:4px;}
+  .rep-card.soon{opacity:.55; pointer-events:none;}
+
+  footer{border-top:1px solid var(--rule); background:var(--paper-raise); margin-top:20px;}
+  .footer-inner{max-width:980px; margin:0 auto; padding:24px; font-size:11.5px; color:var(--ink-soft);}
+
+  @media (max-width:640px){
+    .id-banner{grid-template-columns:1fr;}
+    .id-illust{max-width:180px; margin:0 auto;}
+    .eco-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">本文へスキップ</a>
+
+<header>
+  <div class="header-inner">
+    <a class="back-link" href="species-index.html">← 種の図鑑へ戻る</a>
+    <span class="site-mark">全国・動物園図鑑 — FAMILY FILE</span>
+  </div>
+</header>
+
+<main id="main" class="page">
+
+  <div class="id-banner">
+    <div class="id-illust">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path d="M40 130 Q30 100 45 90 Q40 75 50 65 Q60 70 62 82 Q75 75 90 78 Q95 65 108 65 Q120 65 124 78 Q138 75 150 82 Q155 68 165 65 Q172 78 165 92 Q178 100 172 120 Q165 135 150 130 L145 150 Q140 160 130 155 L128 138 Q110 142 92 138 L88 155 Q78 160 74 150 L70 130 Q55 138 40 130 Z" fill="var(--moss)"/>
+        <circle cx="58" cy="88" r="4" fill="#F3EFE6"/>
+        <circle cx="72" cy="86" r="4" fill="#F3EFE6"/>
+        <path d="M172 120 Q195 118 198 140 Q196 158 178 155" stroke="var(--moss)" stroke-width="10" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="id-num">FAMILY FILE No. 01</div>
+      <h1 class="id-name-jp">サンショウウオ科</h1>
+      <div class="id-name-latin">Hynobiidae</div>
+      <div class="id-tags">
+        <span class="tag">有尾目</span>
+        <span class="tag">世界で8属・約60種</span>
+        <span class="tag warn">日本産は約48種・うち47種が固有種</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">01</span><span class="sec-title">この科について</span></div>
+    <p>サンショウウオ科は、日本を世界屈指の多様性ホットスポットとするグループ。狭い地域ごとに独立した種へと分化しており、「〇〇サンショウウオ」という地名を冠した種が全国に点在する。近年のDNA解析により、かつて同一種の地域変異とされていたものが次々と別種として独立しており、2022年時点で日本産は3属48種（うち47種が固有種）にのぼる。今も新種記載が続いているため、本ページの種数は今後さらに増える可能性がある。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">02</span><span class="sec-title">共通する生態</span></div>
+    <div class="eco-grid">
+      <div class="eco-item">
+        <span class="eco-label">A. 繁殖場所による2タイプ</span>
+        <p>湧き水や水たまりなど流れのない場所に産卵する「止水性」と、渓流など緩い流れのある場所に産卵する「流水性」に大別される。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">B. 卵のう</span>
+        <p>多くの種がバナナ型・三日月型の一対の卵のうを産む。1つの卵のうに数十個の卵が入る。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">C. 暮らし方</span>
+        <p>幼生は水中で育ち、上陸後は林床の土中や落ち葉の下で昆虫・ミミズなどを食べて暮らす。繁殖期以外はほとんど姿を見せない。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">D. 脅威</span>
+        <p>宅地開発や里山の放置による繁殖地の乾燥化、アライグマなど外来種による食害で、多くの種が減少傾向にある。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">03</span><span class="sec-title">日本産サンショウウオ科（一部抜粋）</span></div>
+    <table class="species-table">
+      <thead><tr><th>和名</th><th>学名</th><th>分布</th><th>環境省RL</th></tr></thead>
+      <tbody>
+        <tr><td>トウキョウサンショウウオ</td><td>Hynobius tokyoensis</td><td>関東地方</td><td class="status-VU">VU</td></tr>
+        <tr><td>エゾサンショウウオ</td><td>Hynobius retardatus</td><td>北海道</td><td class="status-blank">—</td></tr>
+        <tr><td>クロサンショウウオ</td><td>Hynobius nigrescens</td><td>本州の山地</td><td class="status-blank">—</td></tr>
+        <tr><td>トウホクサンショウウオ</td><td>Hynobius lichenatus</td><td>東北地方ほか</td><td class="status-NT">NT</td></tr>
+        <tr><td>カスミサンショウウオ</td><td>Hynobius nebulosus</td><td>近畿地方ほか</td><td class="status-blank">—</td></tr>
+        <tr><td>ヒダサンショウウオ</td><td>Hynobius kimurae</td><td>中部地方の渓流</td><td class="status-blank">—</td></tr>
+        <tr><td>アベサンショウウオ</td><td>Hynobius abei</td><td>京都府・福井県の一部</td><td class="status-CR">CR</td></tr>
+        <tr><td>アマクササンショウウオ</td><td>Hynobius amakusaensis</td><td>熊本県天草</td><td class="status-CR">CR</td></tr>
+        <tr><td>オオダイガハラサンショウウオ</td><td>Hynobius boulengeri</td><td>紀伊半島</td><td class="status-blank">天然記念物指定地あり</td></tr>
+        <tr><td>ハコネサンショウウオ</td><td>Onychodactylus japonicus</td><td>本州・四国・九州の渓流</td><td class="status-blank">—</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px; font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft);">※ 日本産48種のうち代表的な10種を抜粋。CR＝絶滅危惧IA類、VU＝絶滅危惧II類、NT＝準絶滅危惧。今後、判明した種から追加していきます。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">04</span><span class="sec-title">代表種の個別ページ</span></div>
+    <div class="rep-links">
+      <a class="rep-card" href="hynobius-tokyoensis.html">
+        <div class="rep-name">トウキョウサンショウウオ</div>
+        <div class="rep-note">公開中 →</div>
+      </a>
+      <div class="rep-card soon">
+        <div class="rep-name">エゾサンショウウオ</div>
+        <div class="rep-note">近日公開予定</div>
+      </div>
+      <div class="rep-card soon">
+        <div class="rep-name">アベサンショウウオ</div>
+        <div class="rep-note">近日公開予定</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    全国・動物園図鑑「FAMILY FILE」プロトタイプ／種数・保全状況は複数の公開資料（環境省レッドリスト、学術文献等）に基づく概算であり、分類は今後の研究で変わる可能性があります。
+  </div>
+</footer>
+
+</body>
+</html>

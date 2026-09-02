@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>トウキョウサンショウウオ｜全国・動物園図鑑</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Zen+Maru+Gothic:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F5F1; --paper-raise:#FFFFFF; --ink:#2B2420; --ink-soft:#6E645C;
+    --rust:#8B6A3F; --rust-soft:#E9E1D0; --moss:#4C6152; --moss-soft:#E1E9E2;
+    --rule:#DFDACF; --en-badge:#8B4A3C;
+    --font-display:'Zen Kaku Gothic New', sans-serif;
+    --font-body:'Zen Maru Gothic', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); line-height:1.8;}
+  h1,h2{font-family:var(--font-display); margin:0;}
+  a{color:inherit;}
+  .skip-link{position:absolute; left:-999px; top:0; background:var(--ink); color:#fff; padding:10px 16px;}
+  .skip-link:focus{left:0;}
+  a:focus-visible{outline:3px solid var(--moss); outline-offset:2px;}
+
+  header{border-bottom:1px solid var(--rule); background:var(--paper-raise);}
+  .header-inner{max-width:980px; margin:0 auto; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; gap:16px;}
+  .back-link{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); text-decoration:underline;}
+  .site-mark{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); letter-spacing:.08em;}
+
+  .page{max-width:980px; margin:0 auto; padding:28px 24px 80px;}
+
+  .id-banner{display:grid; grid-template-columns:220px 1fr; gap:28px; background:var(--paper-raise); border:1.5px solid var(--ink); padding:24px; margin-bottom:22px;}
+  .id-illust{background:var(--moss-soft); display:flex; align-items:center; justify-content:center; aspect-ratio:1/1;}
+  .id-illust svg{width:78%; height:78%;}
+  .id-num{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); letter-spacing:.1em;}
+  .id-name-jp{font-size:clamp(26px,4vw,36px); margin-top:4px;}
+  .id-name-latin{font-family:var(--font-mono); font-style:italic; color:var(--ink-soft); font-size:14px; margin-top:2px;}
+  .id-tags{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;}
+  .tag{font-family:var(--font-mono); font-size:11px; padding:4px 10px; border:1px solid var(--ink); color:var(--ink);}
+  .tag.warn{background:var(--en-badge); color:#fff; border-color:var(--en-badge); font-weight:600;}
+  .id-basic{display:grid; grid-template-columns:auto 1fr; gap:6px 14px; margin-top:16px; font-size:13.5px;}
+  .id-basic dt{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); white-space:nowrap;}
+  .id-basic dd{margin:0;}
+
+  .sec{background:var(--paper-raise); border:1.5px solid var(--ink); padding:22px 24px; margin-bottom:18px;}
+  .sec-head{display:flex; align-items:baseline; gap:10px; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--rule);}
+  .sec-no{font-family:var(--font-mono); font-size:12px; color:#fff; background:var(--moss); padding:3px 9px;}
+  .sec-title{font-size:19px;}
+  .sec p{margin:0; font-size:14px;}
+
+  .facility-list{list-style:none; margin:0; padding:0; display:grid; gap:8px;}
+  .facility-list li{display:flex; align-items:center; gap:12px; border:1px solid var(--rule); padding:10px 14px; font-size:14px;}
+  .fac-pref{font-family:var(--font-mono); font-size:11px; color:#fff; background:var(--moss); padding:2px 8px; flex-shrink:0; min-width:64px; text-align:center;}
+  .map-note{text-align:center; font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); margin-top:10px;}
+
+  .eco-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .eco-item{border:1px solid var(--rule); padding:12px 14px;}
+  .eco-label{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); display:block; margin-bottom:4px;}
+  .eco-item p{font-size:13.5px;}
+
+  .na-note{font-family:var(--font-mono); font-size:12.5px; color:var(--ink-soft); font-style:italic;}
+
+  .story{border-left:4px solid var(--moss); padding:6px 0 6px 16px; font-size:14.5px;}
+  .story b{color:var(--moss);}
+
+  .status-row{display:flex; gap:28px; flex-wrap:wrap;}
+  .status-block{flex:1; min-width:180px;}
+  .status-label{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); display:block;}
+  .status-value{font-size:20px; font-weight:700; margin-top:2px;}
+
+  footer{border-top:1px solid var(--rule); background:var(--paper-raise); margin-top:20px;}
+  .footer-inner{max-width:980px; margin:0 auto; padding:24px; font-size:11.5px; color:var(--ink-soft);}
+
+  @media (max-width:640px){
+    .id-banner{grid-template-columns:1fr;}
+    .id-illust{max-width:200px; margin:0 auto;}
+    .eco-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">本文へスキップ</a>
+
+<header>
+  <div class="header-inner">
+    <a class="back-link" href="family-hynobiidae.html">← サンショウウオ科ページへ戻る</a>
+    <span class="site-mark">全国・動物園図鑑 — SPECIES FILE</span>
+  </div>
+</header>
+
+<main id="main" class="page">
+
+  <!-- ===== 種名バナー ===== -->
+  <div class="id-banner">
+    <div class="id-illust">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path d="M40 120 Q35 100 45 92 Q42 80 50 72 Q58 76 60 86 Q75 78 95 80 Q100 68 112 68 Q124 68 128 80 Q140 76 150 84 Q152 74 160 70 Q168 82 162 94 Q172 100 168 114 Q162 126 150 122 L146 138 Q142 146 134 142 L132 128 Q115 132 98 128 L95 142 Q87 146 84 138 L80 122 Q62 128 40 120 Z" fill="var(--moss)"/>
+        <circle cx="56" cy="88" r="3.6" fill="#F3EFE6"/>
+        <circle cx="68" cy="86" r="3.6" fill="#F3EFE6"/>
+        <path d="M168 114 Q188 112 190 132 Q188 148 172 145" stroke="var(--moss)" stroke-width="9" fill="none" stroke-linecap="round"/>
+        <path d="M50 128 L44 150 M70 132 L66 154 M100 134 L98 156 M130 130 L134 152 M150 122 L156 142" stroke="var(--moss)" stroke-width="5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="id-num">SPECIES FILE No. 0002</div>
+      <h1 class="id-name-jp">トウキョウサンショウウオ</h1>
+      <div class="id-name-latin">Hynobius tokyoensis</div>
+      <div class="id-tags">
+        <span class="tag warn">環境省RL：VU（絶滅危惧II類）</span>
+        <span class="tag">有尾目</span>
+        <span class="tag">サンショウウオ科</span>
+        <span class="tag">日本固有種</span>
+        <span class="tag">止水性</span>
+      </div>
+      <dl class="id-basic">
+        <dt>分類</dt><dd>両生綱 有尾目 サンショウウオ科 サンショウウオ属</dd>
+        <dt>大きさ</dt><dd>全長 8〜13cm（メスがやや大きい）／体重 3〜10g</dd>
+        <dt>分布</dt><dd>関東地方（栃木県〜神奈川県三浦半島・千葉県房総半島、福島県南部）※群馬県を除く</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- ===== 03. 飼育している園・館 ===== -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">03</span><span class="sec-title">飼育している園・館</span></div>
+    <ul class="facility-list">
+      <li><span class="fac-pref">東京都</span>恩賜上野動物園（両生爬虫類館）</li>
+      <li><span class="fac-pref">東京都</span>井の頭自然文化園</li>
+      <li><span class="fac-pref">神奈川県</span>相模川ふれあい科学館</li>
+    </ul>
+    <p class="map-note">※ 確認できた代表例のみ表示。分布地の性質上、地域の自然観察施設や里山保全団体でも保護・展示されている場合があります。</p>
+  </div>
+
+  <!-- ===== 04. 特徴 ===== -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">04</span><span class="sec-title">特徴</span></div>
+    <p>丘陵地の湧き水がある雑木林にすむ、地味な黒褐色の小型サンショウウオ。繁殖期以外はめったに姿を見せず、林床の土中や落ち葉の下でひっそりと暮らす。地域によっては「ヤマカジ」「ヤマッカジ」などの方言名で古くから親しまれてきた。</p>
+  </div>
+
+  <!-- ===== 05. 生態 ===== -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">05</span><span class="sec-title">生態</span></div>
+    <div class="eco-grid">
+      <div class="eco-item">
+        <span class="eco-label">A. 食べ物</span>
+        <p>幼生はプランクトンやミジンコなど。上陸後の幼体・成体は昆虫・クモ・ミミズなどを食べる。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">B. 繁殖・飼育形態</span>
+        <p>2〜4月頃、湧き水の溜まりなど止水域にクロワッサン型（三日月型）の卵のうを一対産む。1つの卵のうに30〜80個ほどの卵が入る。産卵を終えるとメスはすぐ陸に戻り、オスも長くはとどまらない。水辺で過ごす期間は1か月に満たない。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">C. 寿命</span>
+        <p>幼生は夏〜秋に上陸し、4〜5年かけて成熟。寿命は10年以上とされる。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">D. 珍しい特徴</span>
+        <p>見た目がよく似た近縁種が多く、近年のDNA解析により「イワキサンショウウオ」など、かつて同種とされていた地域個体群が別種として独立している。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">E. 繁殖期以外の生態</span>
+        <p>産卵期を除くとほとんど地上に姿を見せず、その暮らしぶりは今なお十分に解明されていない。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">F. 脅威</span>
+        <p>宅地開発や里山の管理放棄による繁殖地の乾燥化、アライグマなど外来種による食害、ペット目的の採集圧により各地で減少している。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 06. 日本との出会い ===== -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">06</span><span class="sec-title">日本との出会い（初来日）</span></div>
+    <p class="na-note">対象外：日本固有種のため、海外からの「初来日」という概念はありません。関東地方の丘陵地に、古くから土地の生き物として暮らしてきました。</p>
+  </div>
+
+  <!-- ===== 07. 日本での飼育数 ===== -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">07</span><span class="sec-title">日本での飼育数（概算）</span></div>
+    <p>全国的な飼育数の公式集計は確認できませんでした。動物園というより、自然文化園・科学館・地域の里山保全団体などでの飼育・保護展示が中心です。東京都日の出町では町の天然記念物に指定されており、各地で保全活動が行われています。</p>
+  </div>
+
+  <!-- ===== 08. 日本との深い・意外な縁 ===== -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">08</span><span class="sec-title">日本との深い・意外な縁</span></div>
+    <p class="story">その名の通り、<b>東京の丘陵地から見つかったことに由来する</b>種。谷戸田や雑木林に暮らし、農作業の邪魔をすることもないため、古くから「ヤマカジ」などと呼ばれ、地域の人々に親しまれてきた。<br><br>
+    人里近くに生息するがゆえに開発の影響を最も受けやすい両生類の一つでもあり、都市化とともに姿を消した生息地も少なくない。今では「里山が健全に残っているかどうか」を示す指標種として、各地の保全活動のシンボルにもなっている。</p>
+  </div>
+
+  <!-- ===== 09. 世界の状況 ===== -->
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">09</span><span class="sec-title">世界の状況</span></div>
+    <div class="status-row">
+      <div class="status-block">
+        <span class="status-label">分布</span>
+        <span class="status-value">日本固有種（世界の生息地＝関東地方の一部のみ）</span>
+      </div>
+      <div class="status-block">
+        <span class="status-label">環境省レッドリスト（2020）</span>
+        <span class="status-value">VU（絶滅危惧II類）</span>
+      </div>
+    </div>
+    <p style="margin-top:14px;">日本以外に生息地を持たないため、「世界の生息数」はそのまま関東地方における生息状況を意味する。開発による生息地の分断が進んでおり、消滅したとみられる地域も報告されている。</p>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    全国・動物園図鑑「SPECIES FILE」プロトタイプ／情報は複数の公開資料（環境省レッドリスト、各施設の解説等）に基づきます。分類は今後の研究で変わる可能性があります。
+  </div>
+</footer>
+
+</body>
+</html>
