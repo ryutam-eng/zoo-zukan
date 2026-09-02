@@ -30,6 +30,7 @@
   .id-banner{display:grid; grid-template-columns:220px 1fr; gap:28px; background:var(--paper-raise); border:1.5px solid var(--ink); padding:24px; margin-bottom:22px;}
   .id-illust{background:var(--moss-soft); display:flex; align-items:center; justify-content:center; aspect-ratio:1/1;}
   .id-illust svg{width:78%; height:78%;}
+  .id-illust img{width:100%; height:100%; object-fit:cover;}
   .id-num{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); letter-spacing:.1em;}
   .id-name-jp{font-size:clamp(26px,4vw,36px); margin-top:4px;}
   .id-name-latin{font-family:var(--font-mono); font-style:italic; color:var(--ink-soft); font-size:14px; margin-top:2px;}
@@ -75,14 +76,7 @@
 
   <div class="id-banner">
     <div class="id-illust">
-      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="100" cy="120" rx="46" ry="38" fill="var(--moss)"/>
-        <circle cx="78" cy="90" r="13" fill="var(--moss)"/><circle cx="122" cy="90" r="13" fill="var(--moss)"/>
-        <circle cx="78" cy="88" r="5" fill="#8B4A3C"/><circle cx="122" cy="88" r="5" fill="#8B4A3C"/>
-        <ellipse cx="100" cy="150" rx="55" ry="16" fill="var(--moss-soft)" opacity="0.7"/>
-        <path d="M60 145 Q55 160 65 165 M140 145 Q145 160 135 165" stroke="var(--moss)" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <circle cx="60" cy="130" r="8" fill="var(--moss)"/><circle cx="140" cy="130" r="8" fill="var(--moss)"/>
-      </svg>
+      <img src="illust-rhacophorus-arboreus.png" alt="モリアオガエルのイラスト" onerror="this.onerror=null;this.src='illust-placeholder.svg';">
     </div>
     <div>
       <div class="id-num">SPECIES FILE No. 0004</div>

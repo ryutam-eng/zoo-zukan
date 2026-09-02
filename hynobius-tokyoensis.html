@@ -34,6 +34,7 @@
   .id-banner{display:grid; grid-template-columns:220px 1fr; gap:28px; background:var(--paper-raise); border:1.5px solid var(--ink); padding:24px; margin-bottom:22px;}
   .id-illust{background:var(--moss-soft); display:flex; align-items:center; justify-content:center; aspect-ratio:1/1;}
   .id-illust svg{width:78%; height:78%;}
+  .id-illust img{width:100%; height:100%; object-fit:cover;}
   .id-num{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); letter-spacing:.1em;}
   .id-name-jp{font-size:clamp(26px,4vw,36px); margin-top:4px;}
   .id-name-latin{font-family:var(--font-mono); font-style:italic; color:var(--ink-soft); font-size:14px; margin-top:2px;}
@@ -96,13 +97,7 @@
   <!-- ===== 種名バナー ===== -->
   <div class="id-banner">
     <div class="id-illust">
-      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <path d="M40 120 Q35 100 45 92 Q42 80 50 72 Q58 76 60 86 Q75 78 95 80 Q100 68 112 68 Q124 68 128 80 Q140 76 150 84 Q152 74 160 70 Q168 82 162 94 Q172 100 168 114 Q162 126 150 122 L146 138 Q142 146 134 142 L132 128 Q115 132 98 128 L95 142 Q87 146 84 138 L80 122 Q62 128 40 120 Z" fill="var(--moss)"/>
-        <circle cx="56" cy="88" r="3.6" fill="#F3EFE6"/>
-        <circle cx="68" cy="86" r="3.6" fill="#F3EFE6"/>
-        <path d="M168 114 Q188 112 190 132 Q188 148 172 145" stroke="var(--moss)" stroke-width="9" fill="none" stroke-linecap="round"/>
-        <path d="M50 128 L44 150 M70 132 L66 154 M100 134 L98 156 M130 130 L134 152 M150 122 L156 142" stroke="var(--moss)" stroke-width="5" stroke-linecap="round"/>
-      </svg>
+      <img src="illust-hynobius-tokyoensis.png" alt="トウキョウサンショウウオのイラスト" onerror="this.onerror=null;this.src='illust-placeholder.svg';">
     </div>
     <div>
       <div class="id-num">SPECIES FILE No. 0002</div>
