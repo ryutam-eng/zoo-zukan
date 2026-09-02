@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>モリアオガエル｜全国・動物園図鑑</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Zen+Maru+Gothic:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F5F1; --paper-raise:#FFFFFF; --ink:#2B2420; --ink-soft:#6E645C;
+    --moss:#4C7A4A; --moss-soft:#E3EEDF; --rule:#DFDACF; --en-badge:#8B4A3C;
+    --font-display:'Zen Kaku Gothic New', sans-serif;
+    --font-body:'Zen Maru Gothic', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); line-height:1.8;}
+  h1,h2{font-family:var(--font-display); margin:0;}
+  a{color:inherit;}
+  .skip-link{position:absolute; left:-999px; top:0; background:var(--ink); color:#fff; padding:10px 16px;}
+  .skip-link:focus{left:0;}
+  a:focus-visible{outline:3px solid var(--moss); outline-offset:2px;}
+  header{border-bottom:1px solid var(--rule); background:var(--paper-raise);}
+  .header-inner{max-width:980px; margin:0 auto; padding:16px 24px; display:flex; justify-content:space-between; align-items:center; gap:16px;}
+  .back-link{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); text-decoration:underline;}
+  .site-mark{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); letter-spacing:.08em;}
+  .page{max-width:980px; margin:0 auto; padding:28px 24px 80px;}
+  .id-banner{display:grid; grid-template-columns:220px 1fr; gap:28px; background:var(--paper-raise); border:1.5px solid var(--ink); padding:24px; margin-bottom:22px;}
+  .id-illust{background:var(--moss-soft); display:flex; align-items:center; justify-content:center; aspect-ratio:1/1;}
+  .id-illust svg{width:78%; height:78%;}
+  .id-num{font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); letter-spacing:.1em;}
+  .id-name-jp{font-size:clamp(26px,4vw,36px); margin-top:4px;}
+  .id-name-latin{font-family:var(--font-mono); font-style:italic; color:var(--ink-soft); font-size:14px; margin-top:2px;}
+  .id-tags{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;}
+  .tag{font-family:var(--font-mono); font-size:11px; padding:4px 10px; border:1px solid var(--ink); color:var(--ink);}
+  .id-basic{display:grid; grid-template-columns:auto 1fr; gap:6px 14px; margin-top:16px; font-size:13.5px;}
+  .id-basic dt{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); white-space:nowrap;}
+  .id-basic dd{margin:0;}
+  .sec{background:var(--paper-raise); border:1.5px solid var(--ink); padding:22px 24px; margin-bottom:18px;}
+  .sec-head{display:flex; align-items:baseline; gap:10px; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--rule);}
+  .sec-no{font-family:var(--font-mono); font-size:12px; color:#fff; background:var(--moss); padding:3px 9px;}
+  .sec-title{font-size:19px;}
+  .sec p{margin:0; font-size:14px;}
+  .facility-list{list-style:none; margin:0; padding:0; display:grid; gap:8px;}
+  .facility-list li{display:flex; align-items:center; gap:12px; border:1px solid var(--rule); padding:10px 14px; font-size:14px;}
+  .fac-pref{font-family:var(--font-mono); font-size:11px; color:#fff; background:var(--moss); padding:2px 8px; flex-shrink:0; min-width:64px; text-align:center;}
+  .map-note{text-align:center; font-family:var(--font-mono); font-size:11.5px; color:var(--ink-soft); margin-top:10px;}
+  .eco-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .eco-item{border:1px solid var(--rule); padding:12px 14px;}
+  .eco-label{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); display:block; margin-bottom:4px;}
+  .eco-item p{font-size:13.5px;}
+  .na-note{font-family:var(--font-mono); font-size:12.5px; color:var(--ink-soft); font-style:italic;}
+  .story{border-left:4px solid var(--moss); padding:6px 0 6px 16px; font-size:14.5px;}
+  .story b{color:var(--moss);}
+  .status-row{display:flex; gap:28px; flex-wrap:wrap;}
+  .status-block{flex:1; min-width:180px;}
+  .status-label{font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); display:block;}
+  .status-value{font-size:20px; font-weight:700; margin-top:2px;}
+  footer{border-top:1px solid var(--rule); background:var(--paper-raise); margin-top:20px;}
+  .footer-inner{max-width:980px; margin:0 auto; padding:24px; font-size:11.5px; color:var(--ink-soft);}
+  @media (max-width:640px){ .id-banner{grid-template-columns:1fr;} .id-illust{max-width:200px; margin:0 auto;} .eco-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">本文へスキップ</a>
+<header>
+  <div class="header-inner">
+    <a class="back-link" href="species-index.html">← 種の図鑑へ戻る</a>
+    <span class="site-mark">全国・動物園図鑑 — SPECIES FILE</span>
+  </div>
+</header>
+<main id="main" class="page">
+
+  <div class="id-banner">
+    <div class="id-illust">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="100" cy="120" rx="46" ry="38" fill="var(--moss)"/>
+        <circle cx="78" cy="90" r="13" fill="var(--moss)"/><circle cx="122" cy="90" r="13" fill="var(--moss)"/>
+        <circle cx="78" cy="88" r="5" fill="#8B4A3C"/><circle cx="122" cy="88" r="5" fill="#8B4A3C"/>
+        <ellipse cx="100" cy="150" rx="55" ry="16" fill="var(--moss-soft)" opacity="0.7"/>
+        <path d="M60 145 Q55 160 65 165 M140 145 Q145 160 135 165" stroke="var(--moss)" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <circle cx="60" cy="130" r="8" fill="var(--moss)"/><circle cx="140" cy="130" r="8" fill="var(--moss)"/>
+      </svg>
+    </div>
+    <div>
+      <div class="id-num">SPECIES FILE No. 0004</div>
+      <h1 class="id-name-jp">モリアオガエル</h1>
+      <div class="id-name-latin">Rhacophorus arboreus</div>
+      <div class="id-tags">
+        <span class="tag">無尾目</span>
+        <span class="tag">アオガエル科</span>
+        <span class="tag">日本固有種</span>
+        <span class="tag">樹上性</span>
+      </div>
+      <dl class="id-basic">
+        <dt>分類</dt><dd>両生綱 無尾目 アオガエル科 アオガエル属</dd>
+        <dt>大きさ</dt><dd>体長 オス4〜6cm、メス6〜9cm（メスの方が大きい）</dd>
+        <dt>分布</dt><dd>本州（一部地域を除く）、佐渡島。四国・九州の一部にも分布記録あり</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">03</span><span class="sec-title">飼育している園・館</span></div>
+    <ul class="facility-list">
+      <li><span class="fac-pref">—</span>各地の里山保全施設・自然史博物館などで繁殖地の保護例あり</li>
+    </ul>
+    <p class="map-note">※ 動物園・水族館での常設展示の確認例が少なく、確認でき次第追加します。国指定天然記念物の繁殖地も各地に点在します。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">04</span><span class="sec-title">特徴</span></div>
+    <p>樹上生活に適応した緑色（個体により赤褐色の斑紋あり）のカエルで、四肢の指先に大きな吸盤を持つ。よく似たシュレーゲルアオガエルとは、本種の方が皮膚がざらついていること、虹彩が赤みを帯びることで区別できる。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">05</span><span class="sec-title">生態</span></div>
+    <div class="eco-grid">
+      <div class="eco-item">
+        <span class="eco-label">A. 食べ物</span>
+        <p>昆虫やクモなどの小動物を食べる肉食性。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">B. 繁殖・飼育形態</span>
+        <p>4〜7月、池や沼に張り出した木の枝に、直径10〜15cmほどの白い泡状の卵塊を産みつける「泡巣」で知られる。1匹のメスに複数のオスが群がって産卵することもある。孵化した幼生は雨などで下の水面に落下し、水中で育つ。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">C. 寿命</span>
+        <p>正確な野生下寿命の記録は少ないが、多くの中型カエル類と同様に数年程度と考えられている。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">D. 珍しい特徴</span>
+        <p>木の上に泡の卵塊をぶら下げるという、カエルとしては珍しい繁殖様式。地域によっては繁殖地そのものが国や自治体の天然記念物に指定されている。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">E. 暮らし方</span>
+        <p>繁殖期以外は森林の樹上でひっそりと暮らし、人目にはつきにくい。</p>
+      </div>
+      <div class="eco-item">
+        <span class="eco-label">F. 脅威</span>
+        <p>産卵に適した池沼と周囲の森林の両方が必要なため、森林伐採や水田・ため池の減少、乾燥化により生息地が失われやすい。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">06</span><span class="sec-title">日本との出会い（初来日）</span></div>
+    <p class="na-note">対象外：日本固有種のため、海外からの「初来日」という概念はありません。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">07</span><span class="sec-title">日本での飼育数（概算）</span></div>
+    <p>動物園・水族館での常設飼育よりも、繁殖地そのものの保護（天然記念物指定）という形で守られていることが多い種です。全国的な飼育数の集計は確認できませんでした。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">08</span><span class="sec-title">日本との深い・意外な縁</span></div>
+    <p class="story">泡状の卵塊が木の枝からぶら下がる姿は、初夏の里山の風物詩として古くから親しまれ、いくつかの繁殖地は<b>国や自治体の天然記念物</b>に指定されている。地域の人々が世代を超えて見守り続けてきた、里山と人との関わりを象徴する生き物のひとつ。</p>
+  </div>
+
+  <div class="sec">
+    <div class="sec-head"><span class="sec-no">09</span><span class="sec-title">世界の状況</span></div>
+    <div class="status-row">
+      <div class="status-block">
+        <span class="status-label">分布</span>
+        <span class="status-value">日本固有種（世界の生息地＝日本国内のみ）</span>
+      </div>
+      <div class="status-block">
+        <span class="status-label">保全状況</span>
+        <span class="status-value">都道府県により絶滅危惧種指定あり（国のレッドリストでは危急種相当）</span>
+      </div>
+    </div>
+    <p style="margin-top:14px;">局所的な個体群が多く、開発や水質汚濁による生息地の消失で、地域によっては絶滅の心配がある。総個体数の全国的な推計は確認できませんでした。</p>
+  </div>
+
+</main>
+<footer>
+  <div class="footer-inner">
+    全国・動物園図鑑「SPECIES FILE」プロトタイプ／情報は複数の公開資料に基づきます。最新の公式発表と異なる場合があります。
+  </div>
+</footer>
+</body>
+</html>
